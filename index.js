@@ -3,7 +3,7 @@ const app = express();
 const dotenv = require("dotenv");
 const port = 8081;
 const { default: mongoose } = require('mongoose');
-
+const registerRoute= require("./router/registerRoute")
 
 const connection = require("./connection/connection");
 const Order = require("./models/orderModel");
@@ -18,6 +18,8 @@ mongoose.connection.on("error",()=>console.log("failed to connect mongoDB"))
 
 app.use(express.json());
 app.use(require('./router/routes'))
+
+app.use(registerRoute)
 
 app.listen(port, ()=>{
     console.log(`server is up at port ${port}`);
