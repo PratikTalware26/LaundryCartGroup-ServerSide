@@ -1,10 +1,15 @@
 const express = require("express");
 
 
+
 const router = express.Router();
 const orderModel = require('../models/orderModel');
+const UserModel = require('../models/registerModel');
+const ProductModel = require('../models/productTypeModel');
+
 
 //for create the order
+
 router.post('/postorder',async(req,res)=>{
     const {
         userId , totalQuantity ,totalPrice,   storeLocation ,city,address,phoneNo,shirts,tShirts,trousers, jeans,  boxers,joggers
@@ -23,6 +28,7 @@ router.post('/postorder',async(req,res)=>{
 })
 
 //to get the existing orders
+
 router.get('/getOrder', async (req,res)=>{
     try{
         let userExist = await UserModel.findById(req.user.userId)
@@ -38,6 +44,7 @@ router.get('/getOrder', async (req,res)=>{
     }
 })
 
+//to delete the order
 router.delete("deleteOrder/:orderId", (req,res)=>{
     orderModel.findByIdAndDelete(req.params.orderId, (err,docs)=>{
         if(err){
@@ -51,4 +58,15 @@ router.delete("deleteOrder/:orderId", (req,res)=>{
         }
     })
 })
+
+//get api for order list
+
+router.get("/", (req,res)=>{
+	ProductModel.find({}, (err, docs)=>{
+	
+	res.json(docs);
+})
+})
+
+
 module.exports = router;
