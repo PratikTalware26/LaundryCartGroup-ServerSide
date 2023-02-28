@@ -7,6 +7,8 @@ const registerRoute= require("./router/registerRoute")
 
 const connection = require("./connection/connection");
 const Order = require("./models/orderModel");
+const User = require("./models/registerModel");
+const ProductType = require("./models/productTypeModel");
 dotenv.config();
 connection();
 

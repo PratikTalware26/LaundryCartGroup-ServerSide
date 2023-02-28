@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema;
+// const Schema = mongoose.Schema;
 // const ObjectId = Schema.ObjectId;
 
-const registerModel = new Schema({
+const registerModel = new mongoose.Schema({
   Name:{
     type:String,
     required:true
@@ -39,4 +39,6 @@ const registerModel = new Schema({
   }
 }, {timestamps:true});
 
-module.exports= mongoose.model('Users', registerModel)
+
+const User= mongoose.model('Users', registerModel);
+module.exports = User;
