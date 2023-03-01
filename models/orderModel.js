@@ -6,10 +6,10 @@ const ordersModel = new mongoose.Schema(
             type: mongoose.Types.ObjectId,
             ref: "User",
         },
-        orderId:{
-            type: String,
-            default: "OR"+parseInt(Math.random()*1000)+1000,
-        },
+        // orderId:{
+        //     type: String,
+        //     default: "OR"+parseInt(Math.random()*1000),
+        // },
 
         totalQuantity: Number,
         totalPrice:Number,

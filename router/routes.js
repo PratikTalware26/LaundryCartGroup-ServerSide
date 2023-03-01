@@ -40,9 +40,21 @@ router.get('/getOrder', async (req,res)=>{
         res.status(200).json(result);
 
     }catch(err){
-        res.status(400).send("server error");
+        res.status(400).send("order is not found");
     }
 })
+
+//to get order by order id for pastorder list
+router.get("/order/:orderId", async(req,res)=>{
+    orderModel.findById(req.params.orderId, (err, docs)=>{
+        if(err){
+            res.send(err);
+        }
+        else{
+            res.json(docs);
+        }
+    })
+});
 
 //to delete the order
 router.delete("deleteOrder/:orderId", (req,res)=>{
