@@ -56,6 +56,19 @@ router.get("/order/:orderId", async(req,res)=>{
     })
 });
 
+//to get user details
+router.get("/userDetails", async(req,res)=>{
+    try{
+        let user = await UserModel.findById(req.user.userId)
+        res.status(200).send(user)
+        res.end()
+    }catch(e){
+        console.log(e);
+        res.status(500).send("server Error");
+        res.end();
+    }
+})
+
 //to delete the order
 router.delete("deleteOrder/:orderId", (req,res)=>{
     orderModel.findByIdAndDelete(req.params.orderId, (err,docs)=>{
