@@ -4,7 +4,7 @@ const ordersModel = new mongoose.Schema(
     {
         userId:{
             type: mongoose.Types.ObjectId,
-            ref: "User",
+            ref: "users",
         },
         // orderId:{
         //     type: String,

@@ -4,7 +4,9 @@ const dotenv = require("dotenv");
 const port = 8081;
 const { default: mongoose } = require('mongoose');
 const registerRoute= require("./router/registerRoute")
+
 var jwt = require('jsonwebtoken');
+const cors= require("cors")
 
 const connection = require("./connection/connection");
 const Order = require("./models/orderModel");
@@ -43,6 +45,7 @@ app.use("/postorder", (req, res, next)=>{
     }
 })
 
+app.use(cors())
 app.use(express.json());
 app.use(require('./router/routes'))
 
