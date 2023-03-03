@@ -15,7 +15,7 @@ const registerModel = new mongoose.Schema({
   },
   Phone:{
     type:Number,
-    required:true
+    required:true,
   },
   District:{
     type:String,
