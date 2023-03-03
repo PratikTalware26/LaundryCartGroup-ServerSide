@@ -1,46 +1,70 @@
 const express = require("express");
-
-
-
 const router = express.Router();
 const orderModel = require('../models/orderModel');
 const UserModel = require('../models/registerModel');
 const ProductModel = require('../models/productTypeModel');
 
+const jwt = require('jsonwebtoken');
+
+const authtoken = require("../tokenMiddleware/tokenMiddleware");
+
 
 //for create the order
 
 router.post('/postorder',async(req,res)=>{
-    const {
-        userId , totalQuantity ,totalPrice,   storeLocation ,city,address,phoneNo,shirts,tShirts,trousers, jeans,  boxers,joggers
-    } = req.body;
-    const createOrder = await orderModel.create({
-        userId , totalQuantity ,totalPrice,   storeLocation ,city,address,phoneNo,shirts,tShirts,trousers, jeans,  boxers,joggers
-    });
-    if(createOrder){
-        res.status(200).json({
-            success: true,
-            message : "Order created successfully"
-        })
-    }else{
-        res.status(400).send("Feield to create order!")
+   orderModel.create(req.body, (err, docs)=>{
+    if(err){
+        res.send(err);
     }
+    else{
+        res.json({
+            success: true,
+            message: "Order added"
+        })
+    }
+   })
 })
 
 //to get the existing orders
 
-router.get('/getOrder', async (req,res)=>{
+router.get('/getOrder',authtoken, async (req,res)=>{
     try{
-        let userExist = await UserModel.findById(req.user.userId)
+        let userExist = await UserModel.findById(req.user._id)
         if(!userExist){
             res.status(400).send("User not exist");
             res.end();
         }
-        const result = await orderModel.findById({userId:req.user.userId});
+        const result = await orderModel.findById({userId:req.user._id});
         res.status(200).json(result);
 
     }catch(err){
-        res.status(400).send("server error");
+        res.status(400).send("order is not found");
+    }
+})
+
+//to get order by order id for pastorder list
+router.get("/order/:orderId", async(req,res)=>{
+    orderModel.findById(req.params.orderId, (err, docs)=>{
+        if(err){
+            res.send(err);
+        }
+        else{
+            res.json(docs);
+        }
+    })
+});
+
+//to get user details
+router.get("/UserDetails",authtoken, async(req,res)=>{
+    // console.log(req.headers.authorization)
+    try{
+        let user = await UserModel.findById(req.user.userId)
+        res.status(200).send(user)
+        res.end()
+    }catch(e){
+        console.log(e);
+        res.status(500).send("server Error");
+        res.end();
     }
 })
 
