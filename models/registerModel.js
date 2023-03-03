@@ -15,8 +15,6 @@ const registerModel = new mongoose.Schema({
   },
   Phone:{
     type:Number,
-    min:10,
-    max:10,
     required:true,
   },
   District:{
@@ -33,8 +31,6 @@ const registerModel = new mongoose.Schema({
   },
   Pincode:{
     type:Number,
-    min:6,
-    max:6,
     required:true
   },
   Password:{

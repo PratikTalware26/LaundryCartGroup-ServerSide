@@ -2,12 +2,14 @@ const express = require("express");
 const registerModel = require("../models/registerModel");
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const router = express.Router();
 router.use(express.json());
 
 const saltRounds = 10;
-const secret = "LaundryToken";
+const secret= process.env.SECRET
 
 //REGISTER
 router.post("/register", async (req, res) => {
@@ -50,9 +52,10 @@ router.post("/register", async (req, res) => {
 });
 
 //LOGIN
-router.get("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     const userExist = await registerModel.findOne({ Email: req.body.Email });
+    // console.log(userExist, req.body)
     if (!userExist) {
       return res.status(500).send("Please input valid email or register");
     }
@@ -78,6 +81,7 @@ router.get("/login", async (req, res) => {
             return res.status(200).send({
                 status: "Success",
                 token: token,
+                name: userExist.Name
               });
           }
           
