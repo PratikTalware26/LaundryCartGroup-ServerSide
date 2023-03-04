@@ -11,8 +11,8 @@ const authtoken = require("../tokenMiddleware/tokenMiddleware");
 
 //for create the order
 
-router.post('/postorder',async(req,res)=>{
-   orderModel.create(req.body, (err, docs)=>{
+router.post('/postorder',authtoken,async(req,res)=>{
+  await orderModel.create(req.body, (err, docs)=>{
     if(err){
         res.send(err);
     }
@@ -29,12 +29,14 @@ router.post('/postorder',async(req,res)=>{
 
 router.get('/getOrder',authtoken, async (req,res)=>{
     try{
-        let userExist = await UserModel.findById(req.user._id)
+        let userExist = await UserModel.findById(req.user.userId)
+        // console.log(userExist);
+
         if(!userExist){
             res.status(400).send("User not exist");
             res.end();
         }
-        const result = await orderModel.findById({userId:req.user._id});
+        const result = await orderModel.find({userId: req.user.userId});
         res.status(200).json(result);
 
     }catch(err){
@@ -69,18 +71,36 @@ router.get("/UserDetails",authtoken, async(req,res)=>{
 })
 
 //to delete the order
-router.delete("deleteOrder/:orderId", (req,res)=>{
-    orderModel.findByIdAndDelete(req.params.orderId, (err,docs)=>{
-        if(err){
-            res.send(err);
+router.delete("/deleteOrder/:orderId",authtoken, async (req,res)=>{
+    // console.log(req.params.orderId);
+    console.log("hello")
+    try {
+        // await orderModel.findOneAndDelete(req.params.orderId, (err,docs)=>{
+        //     if(err){
+        //         return res.send(err);
+
+        //     }
+        //     else{
+        //         return res.json({
+        //             success:true,
+        //             message:"Order deleted"
+        //         })
+        //     }
+        //     // return 
+        // })
+
+        const data= await orderModel.findOneAndDelete({_id: req.params.orderId});
+        if(!data){
+            return res.send("err")
         }
         else{
-            res.json({
-                success:true,
-                message:"Order deleted"
-            })
+            return res.send("suc");
         }
-    })
+    } catch (error) {
+        console.log(error);
+        res.end();
+    }
+  
 })
 
 //get api for order list
