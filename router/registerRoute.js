@@ -51,13 +51,22 @@ router.post("/register", async (req, res) => {
   }
 });
 
-//LOGIN
+
+//login
 router.post("/login", async (req, res) => {
   try {
-    const userExist = await registerModel.findOne({ Email: req.body.Email });
-    // console.log(userExist, req.body)
+    let userExist;
+    if(parseInt(req.body.Email)){
+      let phoneNo= parseInt(req.body.Email)
+      // console.log(phoneNo)
+       userExist = await registerModel.findOne({ Phone: phoneNo });
+    }else{
+      userExist = await registerModel.findOne({ Email: req.body.Email });
+    }
+    
+
     if (!userExist) {
-      return res.status(500).send("Please input valid email or register");
+      return res.status(500).send("Please input valid email/Phone or register");
     }
 
     bcrypt.compare(
@@ -65,33 +74,27 @@ router.post("/login", async (req, res) => {
       userExist.Password,
       function (err, result) {
         // result == true
-        try {
-          if (err) {
-            return res.status(400).send("Error:", err.message);
-          }
-          if (result) {
-            const token = jwt.sign(
-              {
-                exp: Math.floor(Date.now() / 1000) + 60 * 60,
-                data: userExist._id,
-              },
-              secret
-            );
-
-            return res.status(200).send({
-                status: "Success",
-                token: token,
-                name: userExist.Name
-              });
-          }
-          
-        } catch (error) {
-          return res.status(400).send("Error:", error.message);
+        if (err) {
+          return res.status(500).send("Invalid Password");
+        }
+        if (result) {
+          let userPayload = { userId: userExist.id };
+          jwt.sign(userPayload, secret, { expiresIn: "1h" }, (error, Token) => {
+            if (error) {
+              console.log(error);
+              return res.status(400).send("Error in the token generation");
+            } else {
+              return res
+                .status(200)
+                .send({ status: "Sucess", token: Token, userData: userExist });
+            }
+          });
         }
       }
     );
-  } catch (error) {
-    return res.status(400).send("Error:", error.message);
+  } catch (err) {
+    //console.log(err)
+    return res.status(500).send("Server error");
   }
 });
 
