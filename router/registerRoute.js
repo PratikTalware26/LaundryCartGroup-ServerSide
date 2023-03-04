@@ -98,39 +98,4 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// router.post("/login", async (request, response) =>{
-//   try{
-//       let userExist = await registerModel.findOne({Email: request.body.Email})
-//       // console.log(userExist.id)
-//       // response.status(200).json(request.body.Email)
-      
-//       if (!userExist){
-//           response.status(400).send("Couldn't find your account Try to Register")
-//           response.end()
-//       }
-//       if (!(await bcrypt.compare(request.body.Password, userExist.Password))){
-//           response.status(400).send("Invaild Password")
-//           response.end()
-//       }
-
-//       let userPayload = {userId: userExist.id}
-//       jwt.sign(userPayload,"LaundryToken",{expiresIn:600000},(error, Token)=>{
-//           if(error){
-//               console.log(error)
-//               response.status(400).send("Error in the token generation")
-//               response.end()
-//           } else{
-//               response.status(200).send({status: "Sucess", token:Token, Name: userExist.Name})
-//               //console.log(Token)
-//               response.end()
-//           }
-//       })
-
-//   }catch (e){
-//       //console.log(e)
-//       response.status(500).send("Server error")
-//       response.end()
-//   }
-// })
-
 module.exports = router;

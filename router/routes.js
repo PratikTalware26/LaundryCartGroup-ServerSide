@@ -73,22 +73,8 @@ router.get("/UserDetails",authtoken, async(req,res)=>{
 //to delete the order
 router.delete("/deleteOrder/:orderId",authtoken, async (req,res)=>{
     // console.log(req.params.orderId);
-    console.log("hello")
+    // console.log("hello")
     try {
-        // await orderModel.findOneAndDelete(req.params.orderId, (err,docs)=>{
-        //     if(err){
-        //         return res.send(err);
-
-        //     }
-        //     else{
-        //         return res.json({
-        //             success:true,
-        //             message:"Order deleted"
-        //         })
-        //     }
-        //     // return 
-        // })
-
         const data= await orderModel.findOneAndDelete({_id: req.params.orderId});
         if(!data){
             return res.send("err")
@@ -108,7 +94,7 @@ router.delete("/deleteOrder/:orderId",authtoken, async (req,res)=>{
 router.get("/", (req,res)=>{
 	ProductModel.find({}, (err, docs)=>{
 	
-	res.json(docs);
+    return res.json(docs);
 })
 })
 
