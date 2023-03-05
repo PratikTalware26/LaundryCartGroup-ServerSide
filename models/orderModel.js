@@ -17,6 +17,8 @@ const ordersModel = new mongoose.Schema(
         city: String,
         address: String,
         phoneNo: Number,
+        prName:String,
+        washType:String,
 
         shirts:{
             name:String,
